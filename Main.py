@@ -30,3 +30,18 @@ plt.ylabel('Average Delay(minutes)')
 plt.xticks(rotation=45)
 plt.tight_layout()
 plt.show()
+
+# convert the FL_DATE into a datetime to then extract the dates from the week
+airport_df['FL_DATE'] = pd.to_datetime(airport_df['FL_DATE'])
+airport_df['DAY_OF_WEEK'] = airport_df['FL_DATE'].dt.day_name()
+
+
+# delay by day of the week
+dow_delay = airport_df.groupby('DAY_OF_WEEK')['DEP_DELAY'].mean()
+
+# Reorder to go monday -> sunday instead of alphabetical
+day_order = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+dow_delay = dow_delay.reindex(day_order)
+
+print(dow_delay)
+
