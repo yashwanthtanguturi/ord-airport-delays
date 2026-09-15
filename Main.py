@@ -45,3 +45,26 @@ dow_delay = dow_delay.reindex(day_order)
 
 print(dow_delay)
 
+# bar chart for day of week delay
+plt.figure(figsize=(10, 6))
+sns.barplot(x=dow_delay.index, y=dow_delay.values)
+plt.title('Average Departure Delay by Day of Week (ORD, June 2026)')
+plt.xlabel('Day of Week')
+plt.ylabel('Average Delay (minutes)')
+plt.tight_layout()
+plt.show()
+
+airport_df['IS_DELAYED'] = (airport_df['DEP_DELAY'] > 15).astype(int)
+print(airport_df['IS_DELAYED'].value_counts())
+print(airport_df['IS_DELAYED'].value_counts(normalize=True))
+
+# feature engineering: one-hot encode categorical columns
+features = pd.get_dummies(airport_df[['OP_UNIQUE_CARRIER', 'DAY_OF_WEEK']], drop_first=True)
+
+print(features.head())
+print(features.shape)
+# X = features (inputs), y = target (what we're predicting)
+X = features
+y = airport_df['IS_DELAYED']
+
+print(X.shape, y.shape)  # should have matching row counts
